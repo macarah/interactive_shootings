@@ -231,7 +231,6 @@ function initialiseSVG() {
 
 function updateBarChart(title = "") {
     svg.selectAll("*").remove();
-    initialiseSVG();
     scrollRightColumnToCoordinates(0, 0)
 
 
@@ -381,6 +380,7 @@ function shootings_map() {
     var data;
     const margin = { top: 175, right: 30, bottom: -20, left: 50 };
 
+
     // Set up the map within the global SVG element
     var mapContainer = svg.append('foreignObject')
         .attr('width', 1200 - margin.left - margin.right)
@@ -412,16 +412,21 @@ function shootings_map() {
     d3.csv("../../data/school-shootings-data.csv")
         .then(function(csv) {
             data = csv;
+            console.log("Data loaded" + data);
             addMarkers();
         })
         .catch(function(error) {
             console.error("Error loading data:", error);
         });
 
-
     //add markers of high schools
+    var index = 0;
+
     function addMarkers() {
+        console.log("Adding markers");
         data.forEach(function(d) {
+            console.log("Index:" + index);
+            console.log("coords: " + d.lat + ", " + d.long);
             var marker = L.circleMarker([+d.lat, +d.long]);
             marker.setStyle({
                 radius: 8,
@@ -437,6 +442,7 @@ function shootings_map() {
             marker.bindPopup(pContent);
 
             marker.addTo(map);
+            index++;
         });
     }
 }
@@ -795,7 +801,7 @@ function makeSandyBarHoverable() {
         .duration(1000)
         .attr("xlink:href", '../../images/sandy_news.webp') // Replace with the path to your image file
         .attr("x", 500) // Adjust the x-coordinate to position the image horizontally
-        .attr("y", 150) // Adjust the y-coordinate to position the image vertically
+        .attr("y", 250) // Adjust the y-coordinate to position the image vertically
         .attr("width", 600) // Set the width of the image
         .attr("height", 500); // Set the height of the image
 
