@@ -91,11 +91,12 @@ header {
     /* in tandem with the flex:1 on left-column, means this will take up 2/3 of the available space*/
     background-color: #ffffff;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: auto;
-    /* Enable horizontal scroll */
+    overflow: auto;
+}
+
+.right-column::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 footer {
@@ -120,7 +121,9 @@ footer {
 }
 
 svg {
-    background-color: #ffffff;
+    background-color: #171616;
+    height: 100%;
+    overflow: auto;
 }
 
 
@@ -137,4 +140,16 @@ svg {
 
 .filler-verse {
     height: 500px;
+}
+
+.colum {
+    cursor: pointer;
+}
+
+.fallen {
+    cursor: pointer;
+}
+
+.sandy {
+    cursor: pointer;
 }
