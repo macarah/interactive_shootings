@@ -431,30 +431,23 @@ function shootings_map() {
     //add markers of high schools
     var index = 0;
 
+    // Add markers of high schools
     function addMarkers() {
         console.log("Adding markers");
         data.forEach(function(d) {
-            console.log("Index:" + index);
-            console.log("coords: " + d.lat + ", " + d.long);
-            var marker = L.circleMarker([+d.lat, +d.long]);
-            marker.setStyle({
-                radius: 8,
-                color: "#878E76",
-                weight: 0.75
-            });
+            var marker = L.marker([+d.lat, +d.long]);
 
-            // content for the popup
+            // Content for the popup
             var pContent = `<strong>School Name:</strong> ${d.school_name}<br><strong>Date:</strong> ${d.date}<br><strong># Killed:</strong> ${d.killed}
             <br><strong># Injured:</strong> ${d.injured}<br><strong>Total Casualties:</strong> ${d.casualties}`;
 
             // Add popup 
             marker.bindPopup(pContent);
-
             marker.addTo(map);
-            index++;
         });
     }
 }
+
 
 
 function weapons() {
