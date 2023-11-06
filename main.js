@@ -1,7 +1,10 @@
 let keyframes = [{
         activeVerse: 1,
         activeLines: [1, 2, 3, 4],
-        svgUpdate: () => updateBarChart("Casualties of School Shootings in USA by Year")
+        svgUpdate: () => {
+            updateBarChart("Casualties of School Shootings in USA by Year");
+            hoverBarLabels();
+        }
     },
     {
         activeVerse: 2,
@@ -44,8 +47,7 @@ let keyframes = [{
     },
     {
         activeVerse: 7,
-        activeLines: [1, 2, 3, 4],
-        svgUpdate: () => shootings_map()
+        activeLines: [1, 2, 3, 4]
     }
 ]
 
@@ -62,6 +64,7 @@ let chartHeight;
 
 let xScale;
 let yScale;
+var isChartLoaded = false;
 
 
 // TODO add event listeners to the buttons
@@ -82,8 +85,8 @@ function backwardClicked() {
     if (keyframeIndex > 0) {
 
         if (keyframeIndex == 8) {
+            isChartLoaded = true;
             updateBarChart("Casualties of School Shootings in USA by Year");
-            makeSandyBarHoverable();
 
         }
         if (keyframeIndex == 4) {
@@ -241,6 +244,7 @@ function updateBarChart(title = "") {
     chartWidth = 2100 - margin.left - margin.right;
     chartHeight = height - margin.top - margin.bottom;
 
+
     chart = svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -368,6 +372,11 @@ function updateBarChart(title = "") {
             var text = svg.select("#chart-title")
                 .text(title);
 
+            if (isChartLoaded) {
+                // Change the color of bars if the chart is fully loaded
+                isChartLoaded = false;
+                highlightColour("2012", "white");
+            }
         })
 
 }
@@ -378,7 +387,7 @@ function shootings_map() {
     scrollRightColumnToCoordinates(0, 0)
     var map;
     var data;
-    const margin = { top: 175, right: 30, bottom: -20, left: 50 };
+    const margin = { top: 175, right: 30, bottom: -20, left: 10 };
 
 
     // Set up the map within the global SVG element
@@ -429,7 +438,7 @@ function shootings_map() {
             console.log("coords: " + d.lat + ", " + d.long);
             var marker = L.circleMarker([+d.lat, +d.long]);
             marker.setStyle({
-                radius: 8,
+                radius: 12,
                 color: "#878E76",
                 weight: 0.75
             });
@@ -438,9 +447,9 @@ function shootings_map() {
             var pContent = `<strong>School Name:</strong> ${d.school_name}<br><strong>Date:</strong> ${d.date}<br><strong># Killed:</strong> ${d.killed}
             <br><strong># Injured:</strong> ${d.injured}<br><strong>Total Casualties:</strong> ${d.casualties}`;
 
+
             // Add popup 
             marker.bindPopup(pContent);
-
             marker.addTo(map);
             index++;
         });
@@ -889,5 +898,37 @@ function resetBarColor(year) {
                 })
         })
 };
+
+function hoverBarLabels() {
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip-donut")
+        .style("opacity", 0);
+
+    d3.csv("../../data/casualties_year.csv")
+        .then(function(data) {
+            chart.selectAll(".bar")
+                .on("mouseover", function(d) {
+                    console.log(data[""])
+                    d3.select(this).transition()
+                        .duration('50')
+                        .attr('opacity', '.85');
+                    div.transition()
+                        .duration(50)
+                        .style("opacity", 1);
+                    div.html(data["total_casualties"])
+                        .style("left", (d3.event.pageX + 10) + "px")
+                        .style("top", (d3.event.pageY + 15) + "px");
+
+                })
+                .on("mouseout", function() {
+                    d3.select(this).transition()
+                        .duration('50')
+                        .attr('opacity', '1');
+                    div.transition()
+                        .duration('50')
+                        .style("opacity", 0);
+                });
+        })
+}
 
 initialise();
