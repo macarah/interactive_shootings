@@ -56,7 +56,7 @@ let svg = d3.select("#svg");
 let keyframeIndex = 0;
 
 const width = 12000;
-const height = 800;
+const height = 750;
 
 let chart;
 let chartWidth;
@@ -831,9 +831,9 @@ function resetSandy() {
         .duration(1000)
         .attr("xlink:href", '../../images/barden-image.png') // Replace with the path to your image file
         .attr("x", 1250) // Adjust the x-coordinate to position the image horizontally
-        .attr("y", 150) // Adjust the y-coordinate to position the image vertically
+        .attr("y", 240) // Adjust the y-coordinate to position the image vertically
         .attr("width", 400) // Set the width of the image
-        .attr("height", 500); // Set the height of the image
+        .attr("height", 400); // Set the height of the image
 }
 
 function makeColumbineBarHoverable() {
